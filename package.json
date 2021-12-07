@@ -1,0 +1,30 @@
+{
+  "name": "haxii-log",
+  "version": "0.1.0",
+  "description": "js logging lib using pino",
+  "main": "log.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haxii/haxii-log.git"
+  },
+  "keywords": [
+    "log"
+  ],
+  "author": "zichao@haxii.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haxii/haxii-log/issues"
+  },
+  "homepage": "https://github.com/haxii/haxii-log#readme",
+  "dependencies": {
+    "pino": "^7.5.1",
+    "pino-pretty": "^7.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.4.1"
+  }
+}
