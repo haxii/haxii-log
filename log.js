@@ -28,11 +28,11 @@ function init({dir, name, service, level}) {
 }
 
 const log = {
-  log: logger.info,
-  info: logger.info,
-  debug: logger.info,
-  error: logger.info,
-  fatal: logger.fatal
+  log: function() { logger.info(arguments) },
+  info: function() { logger.info(arguments) },
+  debug: function() { logger.debug(arguments) },
+  error: function() { logger.error(arguments) },
+  fatal: function() { logger.fatal(arguments) }
 }
 
 module.exports = log
