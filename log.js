@@ -4,7 +4,6 @@ const pino = require('pino')
 var pretty = require('pino-pretty')
 
 let logger = pino()
-logger.log = logger.info
 
 function init({dir, name, service, level}) {
   const logPath = path.join(dir ?? 'log', `${name}-${process.pid}.log`)
@@ -28,5 +27,13 @@ function init({dir, name, service, level}) {
   })
 }
 
-module.exports = logger
+const log = {
+  log: logger.info,
+  info: logger.info,
+  debug: logger.info,
+  error: logger.info,
+  fatal: logger.fatal
+}
+
+module.exports = log
 module.exports.initLogger = init
