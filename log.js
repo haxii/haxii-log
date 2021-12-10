@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const pino = require('pino')
-var pretty = require('pino-pretty')
+const pretty = require('pino-pretty')
 
 let logger = pino()
 
@@ -27,7 +27,15 @@ function init({dir, name, service, level}) {
   })
 }
 
+const loggersWithWho = {}
+
 const log = {
+  withWho: function(who) {
+    if (!loggersWithWho[who]) {
+      loggersWithWho[who] = logger.child({who})
+    }
+    return loggersWithWho[who]
+  },
   log: function() { logger.info(...arguments) },
   info: function() { logger.info(...arguments) },
   debug: function() { logger.debug(...arguments) },
