@@ -6,7 +6,9 @@ const pretty = require('pino-pretty')
 let logger = pino()
 
 function init({dir, name, service, level}) {
-  const logPath = path.join(dir ?? 'log', `${name}-${process.pid}.log`)
+  // get logger name from env 1st
+  const loggerName = process?.env?.LOGGER_NAME ?? name
+  const logPath = path.join(dir ?? 'log', `${loggerName}-${process.pid}.log`)
 
   var logStreams = [{stream: fs.createWriteStream(logPath)}]
 
@@ -22,7 +24,7 @@ function init({dir, name, service, level}) {
       level: label => { return { level: label } }
     }
   }, pino.multistream(logStreams)).child({
-    name: name,
+    process: loggerName,
     service: service
   })
 }
