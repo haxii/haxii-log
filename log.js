@@ -16,7 +16,9 @@ function make({serv, proc, target, level, pretty} = {}) {
 
   const stream = []
   if (pretty) { stream.push({stream: pinoPretty()}) }
-  if (target !== 'stdout') {
+  if (target === 'stdout') {
+    stream.push({stream: process.stdout})
+  } else {
     const logPath = path.join(target ?? 'log', `${serv}-${process.pid}.log`)
     stream.push({stream: fs.createWriteStream(logPath)})
   }
