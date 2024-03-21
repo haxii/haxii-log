@@ -5,12 +5,13 @@ const pinoPretty = require('pino-pretty')
 
 let logger = pino()
 
-function make({serv, proc, target, level, pretty} = {}) {
+function make({serv, proc, target, level, pretty, stack_adj} = {}) {
   serv = process?.env?.LOG_SERV_NAME ?? (serv || 'pino')
   proc = process?.env?.LOG_PROC_NAME ?? proc
   target = process?.env?.LOG_TARGET ?? (target || 'stdout')
   level = process?.env?.LOG_LEVEL ?? (level || 'info')
   pretty = process?.env?.SYS_DEV ? !!process?.env?.SYS_DEV : !!pretty
+  stack_adj = stack_adj || 0 // stack adjustment
 
   if (!['fatal', 'error', 'warn', 'info', 'debug', 'trace'].includes(level)) { level = 'info' }
 
@@ -26,6 +27,13 @@ function make({serv, proc, target, level, pretty} = {}) {
   }
 
   logger = pino({
+    mixin: function(_, level) {
+      if (level < 50) { return {} }
+      const caller = Error().stack.split('\n').slice(2).filter(s =>
+        !s.includes('node_modules/pino') && !s.includes('node_modules\\pino'))[1 + stack_adj]
+        .substring(7).replace('Object.<anonymous> (', '').replace(')', '')
+      return {caller}
+    },
     level: level ?? 'info',
     messageKey: 'message',
     timestamp: _ => ',"time":"' + (new Date()).toISOString() + '"',
@@ -50,6 +58,7 @@ function init({dir, name, service, level}) {
   logger = pino({
     level: level ?? 'info',
     messageKey: 'message',
+    errorKey: 'error',
     timestamp: () => ',"time":"' + (new Date()).toISOString() + '"',
     formatters: {
       level: label => { return { level: label } }
