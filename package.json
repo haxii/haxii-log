@@ -1,6 +1,6 @@
 {
   "name": "haxii-log",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "js logging lib using pino",
   "main": "log.js",
   "scripts": {
