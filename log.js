@@ -36,8 +36,7 @@ function make({serv, proc, target, level, pretty, stack_adj} = {}) {
     mixin: function(_, level) {
       if (level < 50) { return {} }
       const caller = Error().stack.split('\n').slice(2).filter(s =>
-        !s.includes('node_modules/pino') && !s.includes('node_modules\\pino'))[1 + stack_adj]
-        .substring(7).replace('Object.<anonymous> (', '').replace(')', '')
+        !s.includes('node_modules/pino') && !s.includes('node_modules\\pino'))[stack_adj]
       return {caller}
     },
     level: level ?? 'info',
