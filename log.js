@@ -22,8 +22,14 @@ function make({serv, proc, target, level, pretty, stack_adj} = {}) {
       stream.push({stream: process.stdout})
     }
   } else {
-    const logPath = path.join(target ?? 'log', `${serv}-${process.pid}.log`)
-    stream.push({stream: fs.createWriteStream(logPath)})
+    try {
+      if (!fs.existsSync(target)) { fs.mkdirSync(target, { recursive: true }) }
+      const logPath = path.join(target ?? 'log', `${serv}-${proc ?? process.pid}.log`)
+      stream.push({stream: fs.createWriteStream(logPath)})
+    } catch (error) {
+      console.log(`fail to create log dir ${target} with error ${error}`)
+      stream.push({stream: process.stdout})
+    }
   }
 
   logger = pino({
