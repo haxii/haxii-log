@@ -5,13 +5,16 @@ const pinoPretty = require('pino-pretty')
 
 let logger = pino()
 
-function make({serv, proc, target, level, pretty, stack_adj} = {}) {
+function make({serv, proc, time_fmt, target, level, pretty, stack_adj} = {}) {
   serv = process?.env?.LOG_SERV_NAME ?? (serv || 'pino')
   proc = process?.env?.LOG_PROC_NAME ?? proc
   target = process?.env?.LOG_TARGET ?? (target || 'stdout')
   level = process?.env?.LOG_LEVEL ?? (level || 'info')
+  time_fmt = process?.env?.LOG_TIME_FMT ?? (time_fmt || 'unix')
   pretty = process?.env?.SYS_DEV ? !!process?.env?.SYS_DEV : !!pretty
   stack_adj = stack_adj || 0 // stack adjustment
+
+  const is_iso_time = ['sls', 'iso'].includes(time_fmt)
 
   if (!['fatal', 'error', 'warn', 'info', 'debug', 'trace'].includes(level)) { level = 'info' }
 
@@ -41,7 +44,7 @@ function make({serv, proc, target, level, pretty, stack_adj} = {}) {
     },
     level: level ?? 'info',
     messageKey: 'message',
-    timestamp: _ => ',"time":"' + (new Date()).toISOString() + '"',
+    timestamp: _ => is_iso_time ? `,"time":"${new Date().toISOString()}"` : `,"time":${parseInt(new Date().getTime()/1000)}`,
     formatters: {
       bindings: _ => { return { process: proc, service: serv} },
       level: label => { return { level: label } }
