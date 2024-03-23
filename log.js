@@ -44,7 +44,7 @@ function make({serv, proc, time_fmt, target, level, pretty, stack_adj} = {}) {
     },
     level: level ?? 'info',
     messageKey: 'message',
-    timestamp: _ => is_iso_time ? `,"time":"${new Date().toISOString()}"` : `,"time":${parseInt(new Date().getTime()/1000)}`,
+    timestamp: _ => is_iso_time ? `,"time":"${new Date().toISOString()}"` : `,"time":${parseInt(new Date().getTime() / 1000)}`,
     formatters: {
       bindings: _ => { return { process: proc, service: serv} },
       level: label => { return { level: label } }
