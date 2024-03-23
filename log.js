@@ -10,7 +10,7 @@ function make({serv, proc, time_fmt, target, level, pretty, stack_adj} = {}) {
   proc = process?.env?.LOG_PROC_NAME ?? proc
   target = process?.env?.LOG_TARGET ?? (target || 'stdout')
   level = process?.env?.LOG_LEVEL ?? (level || 'info')
-  time_fmt = process?.env?.LOG_TIME_FMT ?? (time_fmt || 'unix')
+  time_fmt = process?.env?.LOG_TIME_FMT ?? (time_fmt || 'iso')
   pretty = process?.env?.SYS_DEV ? !!process?.env?.SYS_DEV : !!pretty
   stack_adj = stack_adj || 0 // stack adjustment
 
